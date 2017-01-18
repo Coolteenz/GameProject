@@ -18,36 +18,26 @@ public class PlayerControllerScript : MonoBehaviour
     LayerMask whatIsGround;
     [SerializeField]
     float jumpForce = 350f;
-
-
-
+    [SerializeField]
+    AudioClip soundJump;
+    AudioSource m_sound;
     Animator anim;
+
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        m_sound = GetComponent<AudioSource>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (grounded && Input.GetKeyDown(KeyCode.Space))
+        //control for jump
+        if (grounded && Input.GetButtonDown("Jump"))
         {
+            m_sound.PlayOneShot(soundJump);
             anim.SetBool("Ground", false);
             GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
-        }
-        // 5 - Shooting
-        bool shoot = Input.GetButtonDown("Fire1");
-        shoot |= Input.GetButtonDown("Fire2");
-        // Careful: For Mac users, ctrl + arrow is a bad idea
-
-        if (shoot)
-        {
-            WeaponScript weapon = GetComponent<WeaponScript>();
-            if (weapon != null)
-            {
-                // false because the player is not an enemy
-                weapon.Attack(false);
-            }
         }
 
     }
@@ -60,8 +50,6 @@ public class PlayerControllerScript : MonoBehaviour
         anim.SetBool("Ground", grounded);
 
         anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
-
-
 
 
 
@@ -94,4 +82,7 @@ public class PlayerControllerScript : MonoBehaviour
         transform.localScale = theScale;
 
     }
+
+
+        
 }
